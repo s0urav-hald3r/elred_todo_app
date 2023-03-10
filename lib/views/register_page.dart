@@ -1,6 +1,6 @@
 import 'package:elred_todo_app/config/app_constants.dart';
 import 'package:elred_todo_app/config/size_configs.dart';
-import 'package:elred_todo_app/views/register_page.dart';
+import 'package:elred_todo_app/views/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
@@ -9,21 +9,23 @@ import 'package:lottie/lottie.dart';
 
 import '../widgets/custom_textfield.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
+  TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    nameController = TextEditingController();
     emailController = TextEditingController();
     passwordController = TextEditingController();
   }
@@ -73,6 +75,12 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const Gap(30),
                       CustomTextField(
+                        controller: nameController,
+                        label: 'Name',
+                        validator: 'name',
+                      ),
+                      const Gap(20),
+                      CustomTextField(
                         controller: emailController,
                         label: 'Email',
                         validator: 'email',
@@ -95,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         onPressed: () {},
                         child: Text(
-                          "Login",
+                          "Signup",
                           style: GoogleFonts.quicksand(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -103,12 +111,12 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      Gap(SizeConfig.screenHeight! * 0.175),
+                      Gap(SizeConfig.screenHeight! * 0.085),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Don't have an account?",
+                            "Already have an account?",
                             style: GoogleFonts.quicksand(
                                 color: Colors.black54,
                                 fontSize: SizeConfig.screenWidth! * 0.035,
@@ -119,10 +127,9 @@ class _LoginPageState extends State<LoginPage> {
                             onTap: () => Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        const RegisterPage())),
+                                    builder: (context) => const LoginPage())),
                             child: Text(
-                              "Signup",
+                              "Login",
                               style: GoogleFonts.quicksand(
                                   color: AppConstants.primaryColor,
                                   fontSize: SizeConfig.screenWidth! * 0.035,
