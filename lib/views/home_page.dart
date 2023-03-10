@@ -1,5 +1,6 @@
 import 'package:elred_todo_app/config/app_constants.dart';
 import 'package:elred_todo_app/config/size_configs.dart';
+import 'package:elred_todo_app/views/add_task.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
@@ -31,7 +32,10 @@ class _HomePageState extends State<HomePage> {
           child: Scaffold(
             floatingActionButton: FloatingActionButton.extended(
                 backgroundColor: AppConstants.primaryColor,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const AddTask()));
+                },
                 label: Row(
                   children: [
                     const Icon(Icons.add),

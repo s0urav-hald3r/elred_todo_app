@@ -12,6 +12,10 @@ class CustomTextField extends StatelessWidget {
     required this.label,
     this.obsecuretext = false,
     this.suffixIcon,
+    this.fillColor,
+    this.lebelColor,
+    this.textColor,
+    this.cursorColor,
   }) : super(key: key);
 
   final TextEditingController controller;
@@ -19,25 +23,29 @@ class CustomTextField extends StatelessWidget {
   final String label;
   final bool obsecuretext;
   final Icon? suffixIcon;
+  final Color? fillColor;
+  final Color? lebelColor;
+  final Color? textColor;
+  final Color? cursorColor;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       validator: ((value) => Validators.choose(validator, value)),
       controller: controller,
-      cursorColor: Colors.black38,
+      cursorColor: cursorColor ?? Colors.black38,
       obscureText: obsecuretext,
       style: GoogleFonts.quicksand(
-          color: Colors.black87,
+          color: textColor ?? Colors.black87,
           fontWeight: FontWeight.w700,
           fontSize: SizeConfig.screenWidth! * 0.04),
       decoration: InputDecoration(
         suffixIcon: suffixIcon,
-        fillColor: Colors.grey.shade100,
+        fillColor: fillColor ?? Colors.grey.shade100,
         filled: true,
         labelText: label,
         labelStyle: GoogleFonts.quicksand(
-            color: Colors.black54,
+            color: lebelColor ?? Colors.black54,
             fontWeight: FontWeight.w500,
             fontSize: SizeConfig.screenWidth! * 0.035),
         border: OutlineInputBorder(

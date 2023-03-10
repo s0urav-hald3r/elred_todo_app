@@ -35,6 +35,12 @@ class Validators {
           return '*Required field';
         }
         return null;
+      
+      case 'text':
+        if (text == null || text.isEmpty) {
+          return '*Required field';
+        }
+        return null;
 
       default:
     }
