@@ -103,6 +103,7 @@ class _AddTaskState extends State<AddTask> {
                           const Gap(20),
                           InkWell(
                             onTap: (() {
+                              _currentDate = DateTime.now();
                               BottomPicker.date(
                                 title: "Choose your date",
                                 titleStyle: GoogleFonts.quicksand(
@@ -112,7 +113,7 @@ class _AddTaskState extends State<AddTask> {
                                 closeIconColor: AppConstants.primaryColor,
                                 dateOrder: DatePickerDateOrder.dmy,
                                 initialDateTime: _currentDate,
-                                minDateTime: DateTime.now(),
+                                minDateTime: _currentDate,
                                 bottomPickerTheme: BottomPickerTheme.plumPlate,
                                 onSubmit: (date) {
                                   setState(() {
@@ -135,7 +136,7 @@ class _AddTaskState extends State<AddTask> {
                                 children: [
                                   Text(
                                     isChooseDate
-                                        ? DateFormat('dd-MM-yyyy')
+                                        ? DateFormat('dd MMMM, yyyy')
                                             .format(_currentDate)
                                         : 'Choose your date',
                                     style: GoogleFonts.quicksand(

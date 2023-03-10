@@ -18,11 +18,11 @@ class TaskCard extends StatelessWidget {
         children: [
           Container(
             width: SizeConfig.screenWidth! * 0.65,
-            height: SizeConfig.screenWidth! * 0.175,
+            height: SizeConfig.screenWidth! * 0.2,
             color: Colors.transparent,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   'Record retro music',
@@ -32,6 +32,15 @@ class TaskCard extends StatelessWidget {
                       color: Colors.black54,
                       fontSize: SizeConfig.screenWidth! * 0.04,
                       fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  '10 March, 2023',
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: GoogleFonts.quicksand(
+                      color: Colors.black45,
+                      fontSize: SizeConfig.screenWidth! * 0.035,
+                      fontWeight: FontWeight.normal),
                 ),
                 Text(
                   'After recording the music it should deliver by evening to the master ji in the gitvaban',
