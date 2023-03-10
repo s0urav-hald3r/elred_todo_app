@@ -1,4 +1,4 @@
-import 'package:elred_todo_app/views/login_page.dart';
+import 'package:elred_todo_app/views/divertion_page.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -18,7 +18,7 @@ class _SplashPageState extends State<SplashPage> {
     Future.delayed(
         const Duration(milliseconds: 1900),
         (() => Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const LoginPage()))));
+            MaterialPageRoute(builder: (context) => const DivertionPage()))));
   }
 
   @override

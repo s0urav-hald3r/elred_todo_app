@@ -48,7 +48,8 @@ class _RegisterPageState extends State<RegisterPage> {
         context: context,
         barrierDismissible: false,
         builder: ((context) => const Center(
-              child: CircularProgressIndicator(),
+              child:
+                  CircularProgressIndicator(color: AppConstants.primaryColor),
             )));
     try {
       await auth.createUserWithEmailAndPassword(

@@ -44,7 +44,8 @@ class _LoginPageState extends State<LoginPage> {
         context: context,
         barrierDismissible: false,
         builder: ((context) => const Center(
-              child: CircularProgressIndicator(),
+              child:
+                  CircularProgressIndicator(color: AppConstants.primaryColor),
             )));
     try {
       await auth.signInWithEmailAndPassword(email: email, password: password);
