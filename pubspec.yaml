@@ -39,6 +39,10 @@ dependencies:
   gap: ^2.0.1
   bottom_picker: ^2.0.1
   intl: ^0.17.0
+  firebase_auth: ^4.2.10
+  firebase_core: ^2.7.1
+  get: ^4.6.5
+  cloud_firestore: ^4.4.4
 
 dev_dependencies:
   flutter_test:

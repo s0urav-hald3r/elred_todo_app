@@ -4,6 +4,7 @@ import 'package:elred_todo_app/views/add_task.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
+import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../widgets/homepage_header.dart';
@@ -30,12 +31,10 @@ class _HomePageState extends State<HomePage> {
             systemNavigationBarIconBrightness: Brightness.dark,
           ),
           child: Scaffold(
+            backgroundColor: Colors.white,
             floatingActionButton: FloatingActionButton.extended(
                 backgroundColor: AppConstants.primaryColor,
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const AddTask()));
-                },
+                onPressed: () => Get.to(const AddTask()),
                 label: Row(
                   children: [
                     const Icon(Icons.add),
@@ -49,10 +48,9 @@ class _HomePageState extends State<HomePage> {
                     )
                   ],
                 )),
-            body: Container(
+            body: SizedBox(
               height: SizeConfig.screenHeight,
               width: SizeConfig.screenWidth,
-              color: Colors.white,
               child: Column(
                 children: [
                   const HomePageHeader(),

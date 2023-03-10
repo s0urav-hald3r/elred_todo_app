@@ -1,9 +1,12 @@
 import 'package:elred_todo_app/widgets/drawer_logo.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../config/size_configs.dart';
+import '../views/login_page.dart';
 
 class HomePageHeader extends StatelessWidget {
   const HomePageHeader({
@@ -28,10 +31,34 @@ class HomePageHeader extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const DrawerLogo(),
-              Icon(
-                Icons.logout,
-                size: SizeConfig.screenWidth! * 0.06,
-                color: Colors.white70,
+              InkWell(
+                onTap: () async {
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: ((context) => const Center(
+                            child: CircularProgressIndicator(),
+                          )));
+                  try {
+                    await FirebaseAuth.instance.signOut();
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const LoginPage()));
+                  } on FirebaseAuthException catch (e) {
+                    Get.snackbar(
+                      "Error",
+                      e.toString(),
+                      snackPosition: SnackPosition.BOTTOM,
+                    );
+                    Navigator.popUntil(context, (route) => route.isFirst);
+                  }
+                },
+                child: Icon(
+                  Icons.logout,
+                  size: SizeConfig.screenWidth! * 0.06,
+                  color: Colors.white70,
+                ),
               )
             ],
           ),

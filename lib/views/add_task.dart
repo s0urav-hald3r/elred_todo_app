@@ -50,10 +50,11 @@ class _AddTaskState extends State<AddTask> {
             value: const SystemUiOverlayStyle(
               statusBarColor: Colors.transparent,
               statusBarIconBrightness: Brightness.dark,
-              systemNavigationBarColor: AppConstants.primaryColor,
-              systemNavigationBarIconBrightness: Brightness.light,
+              systemNavigationBarColor: Colors.transparent,
+              systemNavigationBarIconBrightness: Brightness.dark,
             ),
             child: Scaffold(
+                backgroundColor: AppConstants.primaryColor,
                 appBar: AppBar(
                   backgroundColor: AppConstants.primaryColor,
                   centerTitle: true,
@@ -70,7 +71,6 @@ class _AddTaskState extends State<AddTask> {
                   height: SizeConfig.screenHeight,
                   width: SizeConfig.screenWidth,
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  color: AppConstants.primaryColor,
                   child: Form(
                     key: _formKey,
                     child: SingleChildScrollView(

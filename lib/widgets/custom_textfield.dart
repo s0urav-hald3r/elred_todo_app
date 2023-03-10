@@ -30,45 +30,50 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      validator: ((value) => Validators.choose(validator, value)),
-      controller: controller,
-      cursorColor: cursorColor ?? Colors.black38,
-      obscureText: obsecuretext,
-      style: GoogleFonts.quicksand(
-          color: textColor ?? Colors.black87,
-          fontWeight: FontWeight.w700,
-          fontSize: SizeConfig.screenWidth! * 0.04),
-      decoration: InputDecoration(
-        suffixIcon: suffixIcon,
-        fillColor: fillColor ?? Colors.grey.shade100,
-        filled: true,
-        labelText: label,
-        labelStyle: GoogleFonts.quicksand(
-            color: lebelColor ?? Colors.black54,
-            fontWeight: FontWeight.w500,
-            fontSize: SizeConfig.screenWidth! * 0.035),
-        border: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey.shade300, width: 1.0),
-          borderRadius: BorderRadius.circular(10),
+    return Theme(
+      data: Theme.of(context).copyWith(
+          colorScheme:
+              ThemeData().colorScheme.copyWith(primary: Colors.black45)),
+      child: TextFormField(
+        validator: ((value) => Validators.choose(validator, value)),
+        controller: controller,
+        cursorColor: cursorColor ?? Colors.black38,
+        obscureText: obsecuretext,
+        style: GoogleFonts.quicksand(
+            color: textColor ?? Colors.black87,
+            fontWeight: FontWeight.w700,
+            fontSize: SizeConfig.screenWidth! * 0.04),
+        decoration: InputDecoration(
+          suffixIcon: suffixIcon,
+          fillColor: fillColor ?? Colors.grey.shade100,
+          filled: true,
+          labelText: label,
+          labelStyle: GoogleFonts.quicksand(
+              color: lebelColor ?? Colors.black54,
+              fontWeight: FontWeight.w500,
+              fontSize: SizeConfig.screenWidth! * 0.035),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey.shade300, width: 1.0),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey.shade300, width: 1.0),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey.shade300, width: 1.0),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey.shade300, width: 1.0),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey.shade300, width: 1.0),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+          ),
+          isDense: true,
         ),
-        errorBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey.shade300, width: 1.0),
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey.shade300, width: 1.0),
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey.shade300, width: 1.0),
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey.shade300, width: 1.0),
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-        ),
-        isDense: true,
       ),
     );
   }

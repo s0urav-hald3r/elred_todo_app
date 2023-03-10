@@ -2,9 +2,11 @@ import 'package:elred_todo_app/config/app_constants.dart';
 import 'package:elred_todo_app/config/size_configs.dart';
 import 'package:elred_todo_app/views/home_page.dart';
 import 'package:elred_todo_app/views/register_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
@@ -19,6 +21,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+  FirebaseAuth auth = FirebaseAuth.instance;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -34,6 +37,27 @@ class _LoginPageState extends State<LoginPage> {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> logingUsingEmailPassword(String email, String password) async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: ((context) => const Center(
+              child: CircularProgressIndicator(),
+            )));
+    try {
+      await auth.signInWithEmailAndPassword(email: email, password: password);
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const HomePage()));
+    } on FirebaseAuthException catch (e) {
+      Get.snackbar(
+        "Error",
+        e.toString(),
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      Navigator.popUntil(context, (route) => route.isFirst);
+    }
   }
 
   @override
@@ -52,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
             body: Container(
               height: SizeConfig.screenHeight,
               width: SizeConfig.screenWidth,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.only(left: 20, right: 20),
               color: Colors.white,
               child: Form(
                 key: _formKey,
@@ -102,10 +126,8 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         onPressed: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const HomePage()));
+                          logingUsingEmailPassword(emailController.text.trim(),
+                              passwordController.text.trim());
                         },
                         child: Text(
                           "Login",
@@ -116,34 +138,37 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      Gap(SizeConfig.screenHeight! * 0.175),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Don't have an account?",
-                            style: GoogleFonts.quicksand(
-                                color: Colors.black54,
-                                fontSize: SizeConfig.screenWidth! * 0.035,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          const Gap(5),
-                          InkWell(
-                            onTap: () => Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const RegisterPage())),
-                            child: Text(
-                              "Signup",
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: SizeConfig.screenHeight! * 0.175),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Don't have an account?",
                               style: GoogleFonts.quicksand(
-                                  color: AppConstants.primaryColor,
+                                  color: Colors.black54,
                                   fontSize: SizeConfig.screenWidth! * 0.035,
-                                  fontWeight: FontWeight.w800),
+                                  fontWeight: FontWeight.w600),
                             ),
-                          ),
-                        ],
-                      ),
+                            const Gap(5),
+                            InkWell(
+                              onTap: () => Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const RegisterPage())),
+                              child: Text(
+                                "Signup",
+                                style: GoogleFonts.quicksand(
+                                    color: AppConstants.primaryColor,
+                                    fontSize: SizeConfig.screenWidth! * 0.035,
+                                    fontWeight: FontWeight.w800),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 ),
