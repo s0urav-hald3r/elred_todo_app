@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_adjacent_string_concatenation
+
 class Validators {
   static choose(String validatorText, String? text) {
     switch (validatorText) {

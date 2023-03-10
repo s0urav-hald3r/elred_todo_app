@@ -41,23 +41,23 @@ class CustomTextField extends StatelessWidget {
             fontWeight: FontWeight.w500,
             fontSize: SizeConfig.screenWidth! * 0.035),
         border: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey.shade100, width: 1.0),
+          borderSide: BorderSide(color: Colors.grey.shade300, width: 1.0),
           borderRadius: BorderRadius.circular(10),
         ),
         errorBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey.shade100, width: 1.0),
+          borderSide: BorderSide(color: Colors.grey.shade300, width: 1.0),
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey.shade100, width: 1.0),
+          borderSide: BorderSide(color: Colors.grey.shade300, width: 1.0),
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey.shade100, width: 1.0),
+          borderSide: BorderSide(color: Colors.grey.shade300, width: 1.0),
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey.shade100, width: 1.0),
+          borderSide: BorderSide(color: Colors.grey.shade300, width: 1.0),
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         isDense: true,

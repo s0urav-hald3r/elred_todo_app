@@ -1,5 +1,6 @@
 import 'package:elred_todo_app/config/app_constants.dart';
 import 'package:elred_todo_app/config/size_configs.dart';
+import 'package:elred_todo_app/views/home_page.dart';
 import 'package:elred_todo_app/views/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,6 +27,13 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     emailController = TextEditingController();
     passwordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -93,7 +101,12 @@ class _LoginPageState extends State<LoginPage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const HomePage()));
+                        },
                         child: Text(
                           "Login",
                           style: GoogleFonts.quicksand(
