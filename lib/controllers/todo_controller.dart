@@ -15,6 +15,7 @@ class ToDoController with ChangeNotifier {
   }
 
   createToDo(ToDoModel todo) async {
+    isLoding = true;
     User? user = _firebaseAuth.currentUser;
 
     await _firebaseFirestore
@@ -25,12 +26,14 @@ class ToDoController with ChangeNotifier {
       todos.add(todo);
     });
 
+    isLoding = false;
     notifyListeners();
   }
 
   readToDo() async {
     isLoding = true;
     User? user = _firebaseAuth.currentUser;
+
     await _firebaseFirestore.collection(user!.uid).get().then((value) async {
       for (var element in value.docs) {
         await _firebaseFirestore
@@ -42,12 +45,15 @@ class ToDoController with ChangeNotifier {
         });
       }
     });
+
     isLoding = false;
     notifyListeners();
   }
 
   updateToDo(ToDoModel todo) async {
+    isLoding = true;
     User? user = _firebaseAuth.currentUser;
+
     var tIndex = todos.indexWhere((element) => element.tid == todo.tid);
     if (tIndex != -1) {
       // Update todo in FireBase
@@ -57,11 +63,15 @@ class ToDoController with ChangeNotifier {
           .update(todo.toMap());
       todos[tIndex] = todo;
     }
+
+    isLoding = false;
     notifyListeners();
   }
 
   deleteToDo(String tId) async {
+    isLoding = true;
     User? user = _firebaseAuth.currentUser;
+
     // After getting the task Id remove that task from tasklist.
     var tIndex = todos.indexWhere((element) => element.tid == tId);
     if (tIndex != -1) {
@@ -69,6 +79,8 @@ class ToDoController with ChangeNotifier {
       await _firebaseFirestore.collection(user!.uid).doc(tId).delete();
       todos.removeAt(tIndex);
     }
+
+    isLoding = false;
     notifyListeners();
   }
 }

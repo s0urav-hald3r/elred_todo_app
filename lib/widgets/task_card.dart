@@ -37,7 +37,7 @@ class TaskCard extends StatelessWidget {
                   Text(
                     toDoModel.title!,
                     overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+                    maxLines: 2,
                     style: GoogleFonts.quicksand(
                         color: Colors.black54,
                         fontSize: SizeConfig.screenWidth! * 0.04,
