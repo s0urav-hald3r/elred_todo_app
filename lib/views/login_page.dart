@@ -48,15 +48,14 @@ class _LoginPageState extends State<LoginPage> {
                   CircularProgressIndicator(color: AppConstants.primaryColor),
             )));
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+      await _firebaseAuth.signInWithEmailAndPassword(
+          email: email, password: password);
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const HomePage()));
     } on FirebaseAuthException catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      Get.snackbar("Error", e.toString(),
+          snackPosition: SnackPosition.BOTTOM,
+          colorText: AppConstants.primaryColor);
       Navigator.popUntil(context, (route) => route.isFirst);
     }
   }
@@ -127,8 +126,11 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         onPressed: () {
-                          logingUsingEmailPassword(emailController.text.trim(),
-                              passwordController.text.trim());
+                          if (_formKey.currentState!.validate()) {
+                            logingUsingEmailPassword(
+                                emailController.text.trim(),
+                                passwordController.text.trim());
+                          }
                         },
                         child: Text(
                           "Login",
@@ -141,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            top: SizeConfig.screenHeight! * 0.175),
+                            top: SizeConfig.screenHeight! * 0.125),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

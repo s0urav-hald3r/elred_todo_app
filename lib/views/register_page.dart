@@ -21,21 +21,18 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    nameController = TextEditingController();
     emailController = TextEditingController();
     passwordController = TextEditingController();
   }
 
   @override
   void dispose() {
-    nameController.dispose();
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
@@ -55,11 +52,9 @@ class _RegisterPageState extends State<RegisterPage> {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const LoginPage()));
     } on FirebaseAuthException catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      Get.snackbar("Error", e.toString(),
+          snackPosition: SnackPosition.BOTTOM,
+          colorText: AppConstants.primaryColor);
       Navigator.popUntil(context, (route) => route.isFirst);
     }
   }
@@ -112,12 +107,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       const Gap(30),
                       CustomTextField(
-                        controller: nameController,
-                        label: 'Name',
-                        validator: 'name',
-                      ),
-                      const Gap(20),
-                      CustomTextField(
                         controller: emailController,
                         label: 'Email',
                         validator: 'email',
@@ -139,8 +128,11 @@ class _RegisterPageState extends State<RegisterPage> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         onPressed: () {
-                          signupUsingEmailPassword(emailController.text.trim(),
-                              passwordController.text.trim());
+                          if (_formKey.currentState!.validate()) {
+                            signupUsingEmailPassword(
+                                emailController.text.trim(),
+                                passwordController.text.trim());
+                          }
                         },
                         child: Text(
                           "Signup",
@@ -153,7 +145,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            top: SizeConfig.screenHeight! * 0.075),
+                            top: SizeConfig.screenHeight! * 0.125),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

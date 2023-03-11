@@ -177,43 +177,56 @@ class _AddTaskState extends State<AddTask> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    barrierDismissible: false,
-                                    builder: ((context) => const Center(
-                                          child: CircularProgressIndicator(
-                                              color: AppConstants.primaryColor),
-                                        )));
-                                try {
-                                  if (widget.taskType == 'UPDATE') {
-                                    context.read<ToDoController>().updateToDo(
-                                        ToDoModel(
-                                            tid: widget.toDoModel!.tid,
-                                            title: taskController.text.trim(),
-                                            description: descriptionController
-                                                .text
-                                                .trim(),
-                                            date: date));
-                                  } else {
-                                    context.read<ToDoController>().createToDo(
-                                        ToDoModel(
-                                            tid: uuid.v4(),
-                                            title: taskController.text.trim(),
-                                            description: descriptionController
-                                                .text
-                                                .trim(),
-                                            date: date));
+                                if (_formKey.currentState!.validate()) {
+                                  if (!isChooseDate) {
+                                    Get.snackbar(
+                                      "Alert",
+                                      'Choose date before submit',
+                                      snackPosition: SnackPosition.BOTTOM,
+                                      colorText: Colors.white
+                                    );
+                                    return;
                                   }
-                                } catch (e) {
-                                  Get.snackbar(
-                                    "Error",
-                                    e.toString(),
-                                    snackPosition: SnackPosition.BOTTOM,
-                                  );
+                                  showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: ((context) => const Center(
+                                            child: CircularProgressIndicator(
+                                                color:
+                                                    AppConstants.primaryColor),
+                                          )));
+                                  try {
+                                    if (widget.taskType == 'UPDATE') {
+                                      context.read<ToDoController>().updateToDo(
+                                          ToDoModel(
+                                              tid: widget.toDoModel!.tid,
+                                              title: taskController.text.trim(),
+                                              description: descriptionController
+                                                  .text
+                                                  .trim(),
+                                              date: date));
+                                    } else {
+                                      context.read<ToDoController>().createToDo(
+                                          ToDoModel(
+                                              tid: uuid.v4(),
+                                              title: taskController.text.trim(),
+                                              description: descriptionController
+                                                  .text
+                                                  .trim(),
+                                              date: date));
+                                    }
+                                  } catch (e) {
+                                    Get.snackbar(
+                                      "Error",
+                                      e.toString(),
+                                      snackPosition: SnackPosition.BOTTOM,
+                                        colorText: Colors.white
+                                    );
+                                  }
+                                  Navigator.popUntil(
+                                      context, (route) => route.isFirst);
+                                  Get.back();
                                 }
-                                Navigator.popUntil(
-                                    context, (route) => route.isFirst);
-                                Get.back();
                               },
                               child: Text(
                                 widget.taskType == 'UPDATE'

@@ -1,3 +1,4 @@
+import 'package:elred_todo_app/config/app_constants.dart';
 import 'package:elred_todo_app/widgets/drawer_logo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -46,11 +47,9 @@ class HomePageHeader extends StatelessWidget {
                         MaterialPageRoute(
                             builder: (context) => const LoginPage()));
                   } on FirebaseAuthException catch (e) {
-                    Get.snackbar(
-                      "Error",
-                      e.toString(),
-                      snackPosition: SnackPosition.BOTTOM,
-                    );
+                    Get.snackbar("Error", e.toString(),
+                        snackPosition: SnackPosition.BOTTOM,
+                        colorText: AppConstants.primaryColor);
                     Navigator.popUntil(context, (route) => route.isFirst);
                   }
                 },
