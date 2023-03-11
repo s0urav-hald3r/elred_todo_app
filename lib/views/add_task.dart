@@ -107,6 +107,7 @@ class _AddTaskState extends State<AddTask> {
                             lebelColor: Colors.white,
                             textColor: Colors.white,
                             cursorColor: Colors.white,
+                            errorTextColor: Colors.white,
                           ),
                           const Gap(20),
                           CustomTextField(
@@ -117,6 +118,7 @@ class _AddTaskState extends State<AddTask> {
                             lebelColor: Colors.white,
                             textColor: Colors.white,
                             cursorColor: Colors.white,
+                            errorTextColor: Colors.white,
                           ),
                           const Gap(20),
                           InkWell(

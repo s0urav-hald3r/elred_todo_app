@@ -18,6 +18,7 @@ class CustomTextField extends StatelessWidget {
     this.lebelColor,
     this.textColor,
     this.cursorColor,
+    this.errorTextColor = Colors.red,
   }) : super(key: key);
 
   final TextEditingController controller;
@@ -29,6 +30,7 @@ class CustomTextField extends StatelessWidget {
   final Color? lebelColor;
   final Color? textColor;
   final Color? cursorColor;
+  final Color errorTextColor;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +48,10 @@ class CustomTextField extends StatelessWidget {
             fontWeight: FontWeight.w700,
             fontSize: SizeConfig.screenWidth! * 0.04),
         decoration: InputDecoration(
+          errorStyle: GoogleFonts.quicksand(
+              color: errorTextColor,
+              fontWeight: FontWeight.w700,
+              fontSize: SizeConfig.screenWidth! * 0.04),
           suffixIcon: suffixIcon != null
               ? InkWell(
                   onTap: () =>
