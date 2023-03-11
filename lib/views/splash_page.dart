@@ -16,9 +16,11 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
     Future.delayed(
-        const Duration(milliseconds: 1900),
-        (() => Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const DivertionPage()))));
+        const Duration(milliseconds: 1800),
+        (() => Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const DivertionPage()),
+            (route) => false)));
   }
 
   @override

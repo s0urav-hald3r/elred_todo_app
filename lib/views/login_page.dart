@@ -1,6 +1,5 @@
 import 'package:elred_todo_app/config/app_constants.dart';
 import 'package:elred_todo_app/config/size_configs.dart';
-import 'package:elred_todo_app/views/home_page.dart';
 import 'package:elred_todo_app/views/register_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -52,16 +51,12 @@ class _LoginPageState extends State<LoginPage> {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
-          (route) => false);
     } on FirebaseAuthException catch (e) {
       Get.snackbar("Error", e.toString(),
           snackPosition: SnackPosition.BOTTOM,
           colorText: AppConstants.primaryColor);
-      Navigator.popUntil(context, (route) => route.isFirst);
     }
+    Navigator.pop(context);
   }
 
   @override
@@ -165,11 +160,14 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             const Gap(5),
                             InkWell(
-                              onTap: () => Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const RegisterPage())),
+                              onTap: () {
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const RegisterPage()),
+                                    (route) => false);
+                              },
                               child: Text(
                                 "Signup",
                                 style: GoogleFonts.quicksand(

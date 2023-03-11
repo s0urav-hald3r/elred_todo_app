@@ -51,8 +51,10 @@ class _RegisterPageState extends State<RegisterPage> {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const LoginPage()));
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginPage()),
+          (route) => false);
     } on FirebaseAuthException catch (e) {
       Get.snackbar("Error", e.toString(),
           snackPosition: SnackPosition.BOTTOM,
@@ -165,10 +167,14 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                             const Gap(5),
                             InkWell(
-                              onTap: () => Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const LoginPage())),
+                              onTap: () {
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const LoginPage()),
+                                    (route) => false);
+                              },
                               child: Text(
                                 "Login",
                                 style: GoogleFonts.quicksand(

@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../config/size_configs.dart';
-import '../views/login_page.dart';
 
 class HomePageHeader extends StatelessWidget {
   const HomePageHeader({
@@ -34,23 +33,12 @@ class HomePageHeader extends StatelessWidget {
               const DrawerLogo(),
               InkWell(
                 onTap: () async {
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: ((context) => const Center(
-                            child: CircularProgressIndicator(),
-                          )));
                   try {
                     await FirebaseAuth.instance.signOut();
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoginPage()));
                   } on FirebaseAuthException catch (e) {
                     Get.snackbar("Error", e.toString(),
                         snackPosition: SnackPosition.BOTTOM,
                         colorText: AppConstants.primaryColor);
-                    Navigator.popUntil(context, (route) => route.isFirst);
                   }
                 },
                 child: Icon(
