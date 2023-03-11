@@ -52,8 +52,10 @@ class _LoginPageState extends State<LoginPage> {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const HomePage()));
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePage()),
+          (route) => false);
     } on FirebaseAuthException catch (e) {
       Get.snackbar("Error", e.toString(),
           snackPosition: SnackPosition.BOTTOM,

@@ -221,7 +221,6 @@ class _AddTaskState extends State<AddTask> {
                                 }
                                 Navigator.popUntil(
                                     context, (route) => route.isFirst);
-                                Get.back();
                               }
                             },
                             child: Text(
