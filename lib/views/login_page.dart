@@ -9,7 +9,9 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
+import '../controllers/auth_controller.dart';
 import '../widgets/custom_textfield.dart';
 
 class LoginPage extends StatefulWidget {
@@ -110,13 +112,18 @@ class _LoginPageState extends State<LoginPage> {
                         validator: 'email',
                       ),
                       const Gap(20),
-                      CustomTextField(
-                        controller: passwordController,
-                        label: 'Password',
-                        validator: 'password',
-                        obsecuretext: true,
-                        suffixIcon: const Icon(Icons.remove_red_eye),
-                      ),
+                      Consumer<AuthController>(
+                          builder: (context, value, child) {
+                        return CustomTextField(
+                          controller: passwordController,
+                          label: 'Password',
+                          validator: 'password',
+                          obsecuretext: value.showPassword ? false : true,
+                          suffixIcon: value.showPassword
+                              ? const Icon(Icons.visibility_off)
+                              : const Icon(Icons.visibility),
+                        );
+                      }),
                       const Gap(30),
                       MaterialButton(
                         color: AppConstants.primaryColor,

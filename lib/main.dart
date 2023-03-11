@@ -1,3 +1,4 @@
+import 'package:elred_todo_app/controllers/auth_controller.dart';
 import 'package:elred_todo_app/controllers/todo_controller.dart';
 import 'package:elred_todo_app/views/splash_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,8 +18,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<ToDoController>(
-      create: (context) => ToDoController(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ToDoController>(
+            create: (context) => ToDoController()),
+        ChangeNotifierProvider<AuthController>(
+            create: (context) => AuthController()),
+      ],
       child: const GetMaterialApp(
         title: 'elRed ToDo',
         debugShowCheckedModeBanner: false,

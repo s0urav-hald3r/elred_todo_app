@@ -167,79 +167,72 @@ class _AddTaskState extends State<AddTask> {
                             ),
                           ),
                           const Gap(30),
-                          Consumer<ToDoController>(
-                              builder: (context, value, child) {
-                            return MaterialButton(
-                              color: Colors.white,
-                              minWidth: SizeConfig.screenWidth,
-                              height: SizeConfig.screenHeight! * 0.07,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  if (!isChooseDate) {
-                                    Get.snackbar(
-                                      "Alert",
-                                      'Choose date before submit',
+                          MaterialButton(
+                            color: Colors.white,
+                            minWidth: SizeConfig.screenWidth,
+                            height: SizeConfig.screenHeight! * 0.07,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                if (!isChooseDate) {
+                                  Get.snackbar(
+                                      "Alert", 'Choose date before submit!',
                                       snackPosition: SnackPosition.BOTTOM,
-                                      colorText: Colors.white
-                                    );
-                                    return;
-                                  }
-                                  showDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      builder: ((context) => const Center(
-                                            child: CircularProgressIndicator(
-                                                color:
-                                                    AppConstants.primaryColor),
-                                          )));
-                                  try {
-                                    if (widget.taskType == 'UPDATE') {
-                                      context.read<ToDoController>().updateToDo(
-                                          ToDoModel(
-                                              tid: widget.toDoModel!.tid,
-                                              title: taskController.text.trim(),
-                                              description: descriptionController
-                                                  .text
-                                                  .trim(),
-                                              date: date));
-                                    } else {
-                                      context.read<ToDoController>().createToDo(
-                                          ToDoModel(
-                                              tid: uuid.v4(),
-                                              title: taskController.text.trim(),
-                                              description: descriptionController
-                                                  .text
-                                                  .trim(),
-                                              date: date));
-                                    }
-                                  } catch (e) {
-                                    Get.snackbar(
-                                      "Error",
-                                      e.toString(),
-                                      snackPosition: SnackPosition.BOTTOM,
-                                        colorText: Colors.white
-                                    );
-                                  }
-                                  Navigator.popUntil(
-                                      context, (route) => route.isFirst);
-                                  Get.back();
+                                      colorText: Colors.white);
+                                  return;
                                 }
-                              },
-                              child: Text(
-                                widget.taskType == 'UPDATE'
-                                    ? 'UPDATE TASK'
-                                    : "Add Task",
-                                style: GoogleFonts.quicksand(
-                                  color: AppConstants.primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: SizeConfig.screenWidth! * 0.045,
-                                ),
+                                showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: ((context) => const Center(
+                                          child: CircularProgressIndicator(
+                                              color: AppConstants.primaryColor),
+                                        )));
+                                try {
+                                  if (widget.taskType == 'UPDATE') {
+                                    Provider.of<ToDoController>(context,
+                                            listen: false)
+                                        .updateToDo(ToDoModel(
+                                            tid: widget.toDoModel!.tid,
+                                            title: taskController.text.trim(),
+                                            description: descriptionController
+                                                .text
+                                                .trim(),
+                                            date: date));
+                                  } else {
+                                    Provider.of<ToDoController>(context,
+                                            listen: false)
+                                        .createToDo(ToDoModel(
+                                            tid: uuid.v4(),
+                                            title: taskController.text.trim(),
+                                            description: descriptionController
+                                                .text
+                                                .trim(),
+                                            date: date));
+                                  }
+                                } catch (e) {
+                                  Get.snackbar("Error", e.toString(),
+                                      snackPosition: SnackPosition.BOTTOM,
+                                      colorText: Colors.white);
+                                }
+                                Navigator.popUntil(
+                                    context, (route) => route.isFirst);
+                                Get.back();
+                              }
+                            },
+                            child: Text(
+                              widget.taskType == 'UPDATE'
+                                  ? 'UPDATE TASK'
+                                  : "Add Task",
+                              style: GoogleFonts.quicksand(
+                                color: AppConstants.primaryColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: SizeConfig.screenWidth! * 0.045,
                               ),
-                            );
-                          })
+                            ),
+                          )
                         ],
                       ),
                     ),

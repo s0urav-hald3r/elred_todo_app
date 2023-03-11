@@ -17,91 +17,90 @@ class TaskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ToDoController>(builder: (context, value, child) {
-      return Container(
-        width: SizeConfig.screenWidth,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            gradient: LinearGradient(
-                colors: [Colors.indigo.shade50, Colors.pink.shade50])),
-        margin: const EdgeInsets.only(bottom: 20),
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          children: [
-            Container(
-              width: SizeConfig.screenWidth! * 0.65,
-              color: Colors.transparent,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    toDoModel.title!,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                    style: GoogleFonts.quicksand(
-                        color: Colors.black54,
-                        fontSize: SizeConfig.screenWidth! * 0.04,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  const Gap(5),
-                  Text(
-                    toDoModel.date!,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: GoogleFonts.quicksand(
-                        color: Colors.black54,
-                        fontSize: SizeConfig.screenWidth! * 0.035,
-                        fontWeight: FontWeight.normal),
-                  ),
-                  const Gap(5),
-                  Text(
-                    toDoModel.description!,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 5,
-                    style: GoogleFonts.quicksand(
-                        color: Colors.black54,
-                        fontSize: SizeConfig.screenWidth! * 0.035,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
+    return Container(
+      width: SizeConfig.screenWidth,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          gradient: LinearGradient(
+              colors: [Colors.indigo.shade50, Colors.pink.shade50])),
+      margin: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.all(10),
+      child: Row(
+        children: [
+          Container(
+            width: SizeConfig.screenWidth! * 0.65,
+            color: Colors.transparent,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  toDoModel.title!,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  style: GoogleFonts.quicksand(
+                      color: Colors.black54,
+                      fontSize: SizeConfig.screenWidth! * 0.04,
+                      fontWeight: FontWeight.bold),
+                ),
+                const Gap(5),
+                Text(
+                  toDoModel.date!,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: GoogleFonts.quicksand(
+                      color: Colors.black54,
+                      fontSize: SizeConfig.screenWidth! * 0.035,
+                      fontWeight: FontWeight.normal),
+                ),
+                const Gap(5),
+                Text(
+                  toDoModel.description!,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 5,
+                  style: GoogleFonts.quicksand(
+                      color: Colors.black54,
+                      fontSize: SizeConfig.screenWidth! * 0.035,
+                      fontWeight: FontWeight.w500),
+                ),
+              ],
             ),
-            Container(
-              color: Colors.transparent,
-              width: SizeConfig.screenWidth! * 0.19,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  InkWell(
-                    onTap: (() {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AddTask(
-                                    taskType: 'UPDATE',
-                                    toDoModel: toDoModel,
-                                  )));
-                    }),
-                    child: const Icon(
-                      Icons.edit,
-                      color: Colors.black,
-                    ),
+          ),
+          Container(
+            color: Colors.transparent,
+            width: SizeConfig.screenWidth! * 0.19,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                InkWell(
+                  onTap: (() {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AddTask(
+                                  taskType: 'UPDATE',
+                                  toDoModel: toDoModel,
+                                )));
+                  }),
+                  child: const Icon(
+                    Icons.edit,
+                    color: Colors.black,
                   ),
-                  InkWell(
-                    onTap: (() {
-                      context.read<ToDoController>().deleteToDo(toDoModel.tid!);
-                    }),
-                    child: const Icon(
-                      Icons.delete,
-                      color: Colors.redAccent,
-                    ),
+                ),
+                InkWell(
+                  onTap: (() {
+                    Provider.of<ToDoController>(context, listen: false)
+                        .deleteToDo(toDoModel.tid!);
+                  }),
+                  child: const Icon(
+                    Icons.delete,
+                    color: Colors.redAccent,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-      );
-    });
+          ),
+        ],
+      ),
+    );
   }
 }

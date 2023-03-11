@@ -1,5 +1,6 @@
 import 'package:elred_todo_app/config/app_constants.dart';
 import 'package:elred_todo_app/config/size_configs.dart';
+import 'package:elred_todo_app/controllers/auth_controller.dart';
 import 'package:elred_todo_app/views/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/custom_textfield.dart';
 
@@ -112,13 +114,18 @@ class _RegisterPageState extends State<RegisterPage> {
                         validator: 'email',
                       ),
                       const Gap(20),
-                      CustomTextField(
-                        controller: passwordController,
-                        label: 'Password',
-                        validator: 'password',
-                        obsecuretext: true,
-                        suffixIcon: const Icon(Icons.remove_red_eye),
-                      ),
+                      Consumer<AuthController>(
+                          builder: (context, value, child) {
+                        return CustomTextField(
+                          controller: passwordController,
+                          label: 'Password',
+                          validator: 'password',
+                          obsecuretext: value.showPassword ? false : true,
+                          suffixIcon: value.showPassword
+                              ? const Icon(Icons.visibility_off)
+                              : const Icon(Icons.visibility),
+                        );
+                      }),
                       const Gap(30),
                       MaterialButton(
                         color: AppConstants.primaryColor,

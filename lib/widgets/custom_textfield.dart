@@ -1,5 +1,7 @@
+import 'package:elred_todo_app/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../config/input_validators.dart';
 import '../config/size_configs.dart';
@@ -44,7 +46,13 @@ class CustomTextField extends StatelessWidget {
             fontWeight: FontWeight.w700,
             fontSize: SizeConfig.screenWidth! * 0.04),
         decoration: InputDecoration(
-          suffixIcon: suffixIcon,
+          suffixIcon: suffixIcon != null
+              ? InkWell(
+                  onTap: () =>
+                      Provider.of<AuthController>(context, listen: false)
+                          .toggleEye(),
+                  child: suffixIcon)
+              : null,
           fillColor: fillColor ?? Colors.grey.shade100,
           filled: true,
           labelText: label,
