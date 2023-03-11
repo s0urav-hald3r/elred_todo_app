@@ -1,19 +1,27 @@
 import 'package:bottom_picker/bottom_picker.dart';
 import 'package:bottom_picker/resources/arrays.dart';
 import 'package:elred_todo_app/config/app_constants.dart';
+import 'package:elred_todo_app/controllers/todo_controller.dart';
+import 'package:elred_todo_app/models/todo_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
+import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 import '../config/size_configs.dart';
 import '../widgets/custom_textfield.dart';
 
 class AddTask extends StatefulWidget {
-  const AddTask({Key? key}) : super(key: key);
+  const AddTask({Key? key, this.toDoModel, required this.taskType})
+      : super(key: key);
+  final ToDoModel? toDoModel;
+  final String taskType;
 
   @override
   State<AddTask> createState() => _AddTaskState();
@@ -24,14 +32,24 @@ class _AddTaskState extends State<AddTask> {
   TextEditingController taskController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   DateTime _currentDate = DateTime.now();
+  String date = '';
   bool isChooseDate = false;
+  var uuid = const Uuid();
 
   @override
   void initState() {
     super.initState();
     _currentDate = DateTime.now();
-    taskController = TextEditingController();
-    descriptionController = TextEditingController();
+    if (widget.taskType == 'UPDATE') {
+      isChooseDate = true;
+      taskController = TextEditingController(text: widget.toDoModel!.title);
+      descriptionController =
+          TextEditingController(text: widget.toDoModel!.description);
+      date = widget.toDoModel!.date!;
+    } else {
+      taskController = TextEditingController();
+      descriptionController = TextEditingController();
+    }
   }
 
   @override
@@ -115,10 +133,12 @@ class _AddTaskState extends State<AddTask> {
                                 initialDateTime: _currentDate,
                                 minDateTime: _currentDate,
                                 bottomPickerTheme: BottomPickerTheme.plumPlate,
-                                onSubmit: (date) {
+                                onSubmit: (dateTime) {
                                   setState(() {
-                                    _currentDate = date;
+                                    _currentDate = dateTime;
                                     isChooseDate = true;
+                                    date = DateFormat('dd MMMM, yyyy')
+                                        .format(dateTime);
                                   });
                                 },
                               ).show(context);
@@ -135,10 +155,7 @@ class _AddTaskState extends State<AddTask> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    isChooseDate
-                                        ? DateFormat('dd MMMM, yyyy')
-                                            .format(_currentDate)
-                                        : 'Choose your date',
+                                    isChooseDate ? date : 'Choose your date',
                                     style: GoogleFonts.quicksand(
                                         color: Colors.white,
                                         fontSize:
@@ -150,23 +167,47 @@ class _AddTaskState extends State<AddTask> {
                             ),
                           ),
                           const Gap(30),
-                          MaterialButton(
-                            color: Colors.white,
-                            minWidth: SizeConfig.screenWidth,
-                            height: SizeConfig.screenHeight! * 0.07,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            onPressed: () {},
-                            child: Text(
-                              "Add Task",
-                              style: GoogleFonts.quicksand(
-                                color: AppConstants.primaryColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: SizeConfig.screenWidth! * 0.045,
+                          Consumer<ToDoController>(
+                              builder: (context, value, child) {
+                            return MaterialButton(
+                              color: Colors.white,
+                              minWidth: SizeConfig.screenWidth,
+                              height: SizeConfig.screenHeight! * 0.07,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                            ),
-                          )
+                              onPressed: () {
+                                if (widget.taskType == 'UPDATE') {
+                                  context.read<ToDoController>().updateToDo(
+                                      ToDoModel(
+                                          tid: widget.toDoModel!.tid,
+                                          title: taskController.text.trim(),
+                                          description:
+                                              descriptionController.text.trim(),
+                                          date: date));
+                                } else {
+                                  context.read<ToDoController>().addToDo(
+                                      ToDoModel(
+                                          tid: uuid.v4(),
+                                          title: taskController.text.trim(),
+                                          description:
+                                              descriptionController.text.trim(),
+                                          date: date));
+                                }
+                                Get.back();
+                              },
+                              child: Text(
+                                widget.taskType == 'UPDATE'
+                                    ? 'UPDATE TASK'
+                                    : "Add Task",
+                                style: GoogleFonts.quicksand(
+                                  color: AppConstants.primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: SizeConfig.screenWidth! * 0.045,
+                                ),
+                              ),
+                            );
+                          })
                         ],
                       ),
                     ),

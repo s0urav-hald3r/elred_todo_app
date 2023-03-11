@@ -1,11 +1,13 @@
 import 'package:elred_todo_app/config/app_constants.dart';
 import 'package:elred_todo_app/config/size_configs.dart';
+import 'package:elred_todo_app/controllers/todo_controller.dart';
 import 'package:elred_todo_app/views/add_task.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/homepage_header.dart';
 import '../widgets/task_card.dart';
@@ -34,7 +36,7 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: Colors.white,
             floatingActionButton: FloatingActionButton.extended(
                 backgroundColor: AppConstants.primaryColor,
-                onPressed: () => Get.to(const AddTask()),
+                onPressed: () => Get.to(const AddTask(taskType: 'CREATE')),
                 label: Row(
                   children: [
                     const Icon(Icons.add),
@@ -72,30 +74,49 @@ class _HomePageState extends State<HomePage> {
                           ),
                           const Gap(20),
                           Expanded(
-                            child: SingleChildScrollView(
-                              child: Column(
-                                  children: List.generate(7, ((index) {
-                                if (index == 6) {
-                                  return Padding(
-                                    padding: EdgeInsets.only(
-                                        bottom:
-                                            SizeConfig.screenHeight! * 0.075),
-                                    child: const TaskCard(),
+                            child: Consumer<ToDoController>(
+                              builder: (context, value, child) {
+                                if (value.todos.isEmpty) {
+                                  return Center(
+                                    child: Text(
+                                      'Currently, you havn\'t add any tasks.\n\nAdd your daily life\'s tasks here',
+                                      textAlign: TextAlign.center,
+                                      style: GoogleFonts.quicksand(
+                                          color: Colors.black87,
+                                          fontSize:
+                                              SizeConfig.screenWidth! * 0.045,
+                                          fontWeight: FontWeight.normal),
+                                    ),
                                   );
                                 }
-                                return Column(
-                                  children: const [
-                                    TaskCard(),
-                                    Divider(
-                                      endIndent: 5,
-                                      indent: 5,
-                                      height: 1,
-                                      color: Colors.black54,
-                                    ),
-                                    Gap(20)
-                                  ],
+                                return SingleChildScrollView(
+                                  child: Column(
+                                      children: List.generate(
+                                          value.todos.length, ((index) {
+                                    if (index == value.todos.length - 1) {
+                                      return Padding(
+                                        padding: EdgeInsets.only(
+                                            bottom: SizeConfig.screenHeight! *
+                                                0.075),
+                                        child: TaskCard(
+                                            toDoModel: value.todos[index]),
+                                      );
+                                    }
+                                    return Column(
+                                      children: [
+                                        TaskCard(toDoModel: value.todos[index]),
+                                        const Divider(
+                                          endIndent: 5,
+                                          indent: 5,
+                                          height: 1,
+                                          color: Colors.black54,
+                                        ),
+                                        const Gap(20)
+                                      ],
+                                    );
+                                  }))),
                                 );
-                              }))),
+                              },
                             ),
                           )
                         ],
