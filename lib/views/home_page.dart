@@ -76,6 +76,12 @@ class _HomePageState extends State<HomePage> {
                           Expanded(
                             child: Consumer<ToDoController>(
                               builder: (context, value, child) {
+                                if (value.isLoding) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(
+                                        color: AppConstants.primaryColor),
+                                  );
+                                }
                                 if (value.todos.isEmpty) {
                                   return Center(
                                     child: Text(

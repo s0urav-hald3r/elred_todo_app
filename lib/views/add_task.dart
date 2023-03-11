@@ -177,23 +177,42 @@ class _AddTaskState extends State<AddTask> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               onPressed: () {
-                                if (widget.taskType == 'UPDATE') {
-                                  context.read<ToDoController>().updateToDo(
-                                      ToDoModel(
-                                          tid: widget.toDoModel!.tid,
-                                          title: taskController.text.trim(),
-                                          description:
-                                              descriptionController.text.trim(),
-                                          date: date));
-                                } else {
-                                  context.read<ToDoController>().addToDo(
-                                      ToDoModel(
-                                          tid: uuid.v4(),
-                                          title: taskController.text.trim(),
-                                          description:
-                                              descriptionController.text.trim(),
-                                          date: date));
+                                showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: ((context) => const Center(
+                                          child: CircularProgressIndicator(
+                                              color: AppConstants.primaryColor),
+                                        )));
+                                try {
+                                  if (widget.taskType == 'UPDATE') {
+                                    context.read<ToDoController>().updateToDo(
+                                        ToDoModel(
+                                            tid: widget.toDoModel!.tid,
+                                            title: taskController.text.trim(),
+                                            description: descriptionController
+                                                .text
+                                                .trim(),
+                                            date: date));
+                                  } else {
+                                    context.read<ToDoController>().createToDo(
+                                        ToDoModel(
+                                            tid: uuid.v4(),
+                                            title: taskController.text.trim(),
+                                            description: descriptionController
+                                                .text
+                                                .trim(),
+                                            date: date));
+                                  }
+                                } catch (e) {
+                                  Get.snackbar(
+                                    "Error",
+                                    e.toString(),
+                                    snackPosition: SnackPosition.BOTTOM,
+                                  );
                                 }
+                                Navigator.popUntil(
+                                    context, (route) => route.isFirst);
                                 Get.back();
                               },
                               child: Text(

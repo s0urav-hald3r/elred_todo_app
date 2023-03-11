@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elred_todo_app/config/app_constants.dart';
 import 'package:elred_todo_app/config/size_configs.dart';
 import 'package:elred_todo_app/views/login_page.dart';
@@ -10,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
-import '../models/user_model.dart';
 import '../widgets/custom_textfield.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -22,7 +20,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
-  FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -52,9 +50,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   CircularProgressIndicator(color: AppConstants.primaryColor),
             )));
     try {
-      await auth.createUserWithEmailAndPassword(
+      await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
-      postDetailsToFirestore();
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const LoginPage()));
     } on FirebaseAuthException catch (e) {
@@ -65,23 +62,6 @@ class _RegisterPageState extends State<RegisterPage> {
       );
       Navigator.popUntil(context, (route) => route.isFirst);
     }
-  }
-
-  postDetailsToFirestore() async {
-    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-    User? user = auth.currentUser;
-
-    UserModel userModel = UserModel();
-
-    // writing all the values
-    userModel.uid = user!.uid;
-    userModel.email = user.email;
-    userModel.name = nameController.text.trim();
-
-    await firebaseFirestore
-        .collection("users")
-        .doc(user.uid)
-        .set(userModel.toMap());
   }
 
   @override

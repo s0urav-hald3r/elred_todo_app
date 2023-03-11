@@ -84,7 +84,7 @@ class TaskCard extends StatelessWidget {
                     }),
                     child: const Icon(
                       Icons.edit,
-                      color: Colors.black54,
+                      color: Colors.black,
                     ),
                   ),
                   InkWell(
@@ -93,7 +93,7 @@ class TaskCard extends StatelessWidget {
                     }),
                     child: const Icon(
                       Icons.delete,
-                      color: Colors.black54,
+                      color: Colors.redAccent,
                     ),
                   ),
                 ],
