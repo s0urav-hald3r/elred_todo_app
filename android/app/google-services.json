@@ -37,6 +37,13 @@
             {
               "client_id": "629581114649-h4b7fupmvu8jicbfv8bm356unbqq3fmj.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "629581114649-vnlgbvbbs0f5o39bj0r28jgemj4kvn2t.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.elredTodoApp"
+              }
             }
           ]
         }

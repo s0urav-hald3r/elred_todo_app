@@ -17,11 +17,15 @@ class DivertionPage extends StatelessWidget {
               return const Center(
                   child: CircularProgressIndicator(
                       color: AppConstants.primaryColor));
-            } else if (snapshot.hasData) {
-              return const HomePage();
-            } else {
+            }
+            if (snapshot.connectionState == ConnectionState.done ||
+                snapshot.connectionState == ConnectionState.active) {
+              if (snapshot.hasData) {
+                return const HomePage();
+              }
               return const LoginPage();
             }
+            return const LoginPage();
           })),
     );
   }
