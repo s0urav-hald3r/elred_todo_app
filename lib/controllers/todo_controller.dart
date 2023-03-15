@@ -4,22 +4,35 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'auth_controller.dart';
+
 class ToDoController with ChangeNotifier {
   List<ToDoModel> todos = [];
   bool isLoding = false;
+  bool isGoogleLogIn = false;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  User? user;
 
-  ToDoController() {
-    readToDo();
+  update(AuthController authController) {
+    user = authController.user;
+  }
+
+  setUser() {
+    user ??= isGoogleLogIn ? null : _firebaseAuth.currentUser;
+  }
+
+  setGoogleLogIn(bool _isGoogleLogIn) {
+    isGoogleLogIn = _isGoogleLogIn;
+    notifyListeners();
   }
 
   createToDo(ToDoModel todo) async {
     isLoding = true;
-    User? user = _firebaseAuth.currentUser;
 
+    String? userId = user!.uid;
     await _firebaseFirestore
-        .collection(user!.uid)
+        .collection(userId)
         .doc(todo.tid)
         .set(todo.toMap())
         .then((value) {
@@ -32,12 +45,12 @@ class ToDoController with ChangeNotifier {
 
   readToDo() async {
     isLoding = true;
-    User? user = _firebaseAuth.currentUser;
 
-    await _firebaseFirestore.collection(user!.uid).get().then((value) async {
+    String? userId = user!.uid;
+    await _firebaseFirestore.collection(userId).get().then((value) async {
       for (var element in value.docs) {
         await _firebaseFirestore
-            .collection(user.uid)
+            .collection(userId)
             .doc(element.reference.id)
             .get()
             .then((value) {
@@ -52,13 +65,13 @@ class ToDoController with ChangeNotifier {
 
   updateToDo(ToDoModel todo) async {
     isLoding = true;
-    User? user = _firebaseAuth.currentUser;
 
+    String? userId = user!.uid;
     var tIndex = todos.indexWhere((element) => element.tid == todo.tid);
     if (tIndex != -1) {
       // Update todo in FireBase
       await _firebaseFirestore
-          .collection(user!.uid)
+          .collection(userId)
           .doc(todo.tid)
           .update(todo.toMap());
       todos[tIndex] = todo;
@@ -70,13 +83,13 @@ class ToDoController with ChangeNotifier {
 
   deleteToDo(String tId) async {
     isLoding = true;
-    User? user = _firebaseAuth.currentUser;
 
+    String? userId = user!.uid;
     // After getting the task Id remove that task from tasklist.
     var tIndex = todos.indexWhere((element) => element.tid == tId);
     if (tIndex != -1) {
       // Delete todo from FireBase
-      await _firebaseFirestore.collection(user!.uid).doc(tId).delete();
+      await _firebaseFirestore.collection(userId).doc(tId).delete();
       todos.removeAt(tIndex);
     }
 

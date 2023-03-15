@@ -58,7 +58,7 @@ class _RegisterPageState extends State<RegisterPage> {
       Get.snackbar("Error", e.toString(),
           snackPosition: SnackPosition.BOTTOM,
           colorText: AppConstants.primaryColor);
-      Navigator.popUntil(context, (route) => route.isFirst);
+      Navigator.pop(context);
     }
   }
 

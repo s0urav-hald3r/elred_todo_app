@@ -21,6 +21,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+  void initState() {
+    Provider.of<ToDoController>(context, listen: false).setUser();
+    Provider.of<ToDoController>(context, listen: false).readToDo();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
         top: false,
@@ -55,7 +62,7 @@ class _HomePageState extends State<HomePage> {
               width: SizeConfig.screenWidth,
               child: Column(
                 children: [
-                  const HomePageHeader(),
+                  HomePageHeader(),
                   Expanded(
                     child: Container(
                       width: SizeConfig.screenWidth,

@@ -26,10 +26,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<ToDoController>(
-            create: (context) => ToDoController()),
         ChangeNotifierProvider<AuthController>(
             create: (context) => AuthController()),
+        ChangeNotifierProxyProvider<AuthController, ToDoController>(
+            create: (context) => ToDoController(),
+            update: (context, authController, toDoController) =>
+                toDoController!..user = authController.user),
       ],
       child: const GetMaterialApp(
         title: 'elRed ToDo',

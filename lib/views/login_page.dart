@@ -1,10 +1,9 @@
 import 'package:elred_todo_app/config/app_constants.dart';
 import 'package:elred_todo_app/config/size_configs.dart';
+import 'package:elred_todo_app/controllers/todo_controller.dart';
 import 'package:elred_todo_app/views/register_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -21,42 +20,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    emailController = TextEditingController();
-    passwordController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
-
-  Future<void> logingUsingEmailPassword(String email, String password) async {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: ((context) => const Center(
-              child:
-                  CircularProgressIndicator(color: AppConstants.primaryColor),
-            )));
-    try {
-      await _firebaseAuth.signInWithEmailAndPassword(
-          email: email, password: password);
-    } on FirebaseAuthException catch (e) {
-      Get.snackbar("Error", e.toString(),
-          snackPosition: SnackPosition.BOTTOM,
-          colorText: AppConstants.primaryColor);
-    }
-    Navigator.pop(context);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,142 +29,146 @@ class _LoginPageState extends State<LoginPage> {
         top: false,
         bottom: false,
         child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: Container(
-            height: SizeConfig.screenHeight,
-            width: SizeConfig.screenWidth,
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            color: Colors.white,
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 50),
-                    child: Lottie.asset('assets/animations/login_logo.json',
-                        width: SizeConfig.screenWidth! * 0.5),
-                  ),
-                  Text(
-                    'Welcome to elRed.',
-                    style: GoogleFonts.quicksand(
-                        color: Colors.black87,
-                        fontSize: SizeConfig.screenWidth! * 0.07,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  const Gap(10),
-                  Text(
-                    'Your personalize To Do App',
-                    style: GoogleFonts.quicksand(
-                        color: Colors.black45,
-                        fontSize: SizeConfig.screenWidth! * 0.04,
-                        fontWeight: FontWeight.w700),
-                  ),
-                  const Gap(30),
-                  CustomTextField(
-                    controller: emailController,
-                    label: 'Email',
-                    validator: 'email',
-                  ),
-                  const Gap(20),
-                  Consumer<AuthController>(builder: (context, value, child) {
-                    return CustomTextField(
-                      controller: passwordController,
-                      label: 'Password',
-                      validator: 'password',
-                      obsecuretext: value.showPassword ? false : true,
-                      suffixIcon: value.showPassword
-                          ? const Icon(Icons.visibility_off)
-                          : const Icon(Icons.visibility),
-                    );
-                  }),
-                  const Gap(30),
-                  MaterialButton(
-                    color: AppConstants.primaryColor,
-                    minWidth: SizeConfig.screenWidth,
-                    height: SizeConfig.screenHeight! * 0.07,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+            resizeToAvoidBottomInset: false,
+            body: Container(
+              height: SizeConfig.screenHeight,
+              width: SizeConfig.screenWidth,
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              color: Colors.white,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 50),
+                      child: Lottie.asset('assets/animations/login_logo.json',
+                          width: SizeConfig.screenWidth! * 0.5),
                     ),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        logingUsingEmailPassword(emailController.text.trim(),
-                            passwordController.text.trim());
-                      }
-                    },
-                    child: Text(
-                      "Login",
+                    Text(
+                      'Welcome to elRed.',
                       style: GoogleFonts.quicksand(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: SizeConfig.screenWidth! * 0.045,
-                      ),
+                          color: Colors.black87,
+                          fontSize: SizeConfig.screenWidth! * 0.07,
+                          fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  // const Gap(20),
-                  // MaterialButton(
-                  //   color: AppConstants.primaryColor,
-                  //   minWidth: SizeConfig.screenWidth,
-                  //   height: SizeConfig.screenHeight! * 0.07,
-                  //   shape: RoundedRectangleBorder(
-                  //     borderRadius: BorderRadius.circular(10),
-                  //   ),
-                  //   onPressed: () {
-                  //     if (_formKey.currentState!.validate()) {
-                  //       logingUsingEmailPassword(emailController.text.trim(),
-                  //           passwordController.text.trim());
-                  //     }
-                  //   },
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.center,
-                  //     children: [
-                  //       Image.asset('assets/images/google_logo.png'),
-                  //       const Gap(20),
-                  //       Text(
-                  //         'Sign in with Google',
-                  //         textAlign: TextAlign.center,
-                  //         style: GoogleFonts.roboto(
-                  //             color: Colors.white,
-                  //             fontSize: SizeConfig.screenWidth! * 0.045,
-                  //             fontWeight: FontWeight.w500),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  const Spacer(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Don't have an account?",
-                        style: GoogleFonts.quicksand(
-                            color: Colors.black54,
-                            fontSize: SizeConfig.screenWidth! * 0.035,
-                            fontWeight: FontWeight.w600),
+                    const Gap(10),
+                    Text(
+                      'Your personalize To Do App',
+                      style: GoogleFonts.quicksand(
+                          color: Colors.black45,
+                          fontSize: SizeConfig.screenWidth! * 0.04,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    const Gap(30),
+                    CustomTextField(
+                      controller: emailController,
+                      label: 'Email',
+                      validator: 'email',
+                    ),
+                    const Gap(20),
+                    Consumer<AuthController>(builder: (context, value, child) {
+                      return CustomTextField(
+                        controller: passwordController,
+                        label: 'Password',
+                        validator: 'password',
+                        obsecuretext: value.showPassword ? false : true,
+                        suffixIcon: value.showPassword
+                            ? const Icon(Icons.visibility_off)
+                            : const Icon(Icons.visibility),
+                      );
+                    }),
+                    const Gap(30),
+                    MaterialButton(
+                      color: AppConstants.primaryColor,
+                      minWidth: SizeConfig.screenWidth,
+                      height: SizeConfig.screenHeight! * 0.07,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      const Gap(5),
-                      InkWell(
-                        onTap: () {
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const RegisterPage()),
-                              (route) => false);
-                        },
-                        child: Text(
-                          "Signup",
-                          style: GoogleFonts.quicksand(
-                              color: AppConstants.primaryColor,
-                              fontSize: SizeConfig.screenWidth! * 0.035,
-                              fontWeight: FontWeight.w800),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          Provider.of<ToDoController>(context, listen: false)
+                              .setGoogleLogIn(false);
+                          Provider.of<AuthController>(context, listen: false)
+                              .logingUsingEmailPassword(
+                                  context,
+                                  emailController.text.trim(),
+                                  passwordController.text.trim());
+                        }
+                      },
+                      child: Text(
+                        "Login",
+                        style: GoogleFonts.quicksand(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: SizeConfig.screenWidth! * 0.045,
                         ),
                       ),
-                    ],
-                  ),
-                  const Gap(20),
-                ],
+                    ),
+                    const Gap(20),
+                    MaterialButton(
+                      color: AppConstants.primaryColor,
+                      minWidth: SizeConfig.screenWidth,
+                      height: SizeConfig.screenHeight! * 0.07,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      onPressed: () {
+                        Provider.of<ToDoController>(context, listen: false)
+                            .setGoogleLogIn(true);
+                        Provider.of<AuthController>(context, listen: false)
+                            .handleGoogleLogIn();
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset('assets/images/google_logo.png'),
+                          const Gap(20),
+                          Text(
+                            'Sign in with Google',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.roboto(
+                                color: Colors.white,
+                                fontSize: SizeConfig.screenWidth! * 0.045,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Spacer(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Don't have an account?",
+                          style: GoogleFonts.quicksand(
+                              color: Colors.black54,
+                              fontSize: SizeConfig.screenWidth! * 0.035,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        const Gap(5),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const RegisterPage()),
+                                (route) => false);
+                          },
+                          child: Text(
+                            "Signup",
+                            style: GoogleFonts.quicksand(
+                                color: AppConstants.primaryColor,
+                                fontSize: SizeConfig.screenWidth! * 0.035,
+                                fontWeight: FontWeight.w800),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Gap(20),
+                  ],
+                ),
               ),
-            ),
-          ),
-        ));
+            )));
   }
 }

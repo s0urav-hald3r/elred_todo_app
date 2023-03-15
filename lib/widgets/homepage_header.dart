@@ -1,17 +1,22 @@
 import 'package:elred_todo_app/config/app_constants.dart';
+import 'package:elred_todo_app/controllers/todo_controller.dart';
 import 'package:elred_todo_app/widgets/drawer_logo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 
 import '../config/size_configs.dart';
 
 class HomePageHeader extends StatelessWidget {
-  const HomePageHeader({
+  HomePageHeader({
     Key? key,
   }) : super(key: key);
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   @override
   Widget build(BuildContext context) {
@@ -31,22 +36,26 @@ class HomePageHeader extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const DrawerLogo(),
-              InkWell(
-                onTap: () async {
-                  try {
-                    await FirebaseAuth.instance.signOut();
-                  } on FirebaseAuthException catch (e) {
-                    Get.snackbar("Error", e.toString(),
-                        snackPosition: SnackPosition.BOTTOM,
-                        colorText: AppConstants.primaryColor);
-                  }
-                },
-                child: Icon(
-                  Icons.logout,
-                  size: SizeConfig.screenWidth! * 0.06,
-                  color: Colors.white70,
-                ),
-              )
+              Consumer<ToDoController>(builder: (context, value, child) {
+                return InkWell(
+                  onTap: () async {
+                    try {
+                      value.isGoogleLogIn
+                          ? _googleSignIn.disconnect()
+                          : await FirebaseAuth.instance.signOut();
+                    } on FirebaseAuthException catch (e) {
+                      Get.snackbar("Error", e.toString(),
+                          snackPosition: SnackPosition.BOTTOM,
+                          colorText: AppConstants.primaryColor);
+                    }
+                  },
+                  child: Icon(
+                    Icons.logout,
+                    size: SizeConfig.screenWidth! * 0.06,
+                    color: Colors.white70,
+                  ),
+                );
+              }),
             ],
           ),
           const Gap(20),
