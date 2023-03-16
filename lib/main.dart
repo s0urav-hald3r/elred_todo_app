@@ -5,11 +5,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/route_manager.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await GetStorage.init();
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
@@ -28,10 +30,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<AuthController>(
             create: (context) => AuthController()),
-        ChangeNotifierProxyProvider<AuthController, ToDoController>(
-            create: (context) => ToDoController(),
-            update: (context, authController, toDoController) =>
-                toDoController!..user = authController.user),
+        ChangeNotifierProvider<ToDoController>(
+            create: (context) => ToDoController()),
       ],
       child: const GetMaterialApp(
         title: 'elRed ToDo',

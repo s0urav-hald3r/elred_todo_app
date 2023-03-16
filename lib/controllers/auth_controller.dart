@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../config/app_constants.dart';
@@ -10,7 +11,7 @@ class AuthController with ChangeNotifier {
   bool isLoading = false;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-  User? user;
+  final storage = GetStorage();
 
   toggleEye() {
     showPassword = !showPassword;
@@ -30,7 +31,7 @@ class AuthController with ChangeNotifier {
     try {
       final UserCredential userCredential = await _firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
-      user = userCredential.user;
+      await storage.write('userId', userCredential.user!.uid);
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       Get.snackbar("Error", e.toString(),
@@ -56,7 +57,7 @@ class AuthController with ChangeNotifier {
       try {
         final UserCredential userCredential =
             await _firebaseAuth.signInWithCredential(credential);
-        user = userCredential.user;
+        await storage.write('userId', userCredential.user!.uid);
       } on FirebaseAuthException catch (e) {
         Get.snackbar("Error", e.toString(),
             snackPosition: SnackPosition.BOTTOM,

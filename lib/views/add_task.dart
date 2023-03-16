@@ -85,192 +85,159 @@ class _AddTaskState extends State<AddTask> {
                         fontWeight: FontWeight.w700),
                   ),
                 ),
-                body:
-                    Consumer<ToDoController>(builder: (context, value, child) {
-                  return Stack(
-                    children: [
-                      Container(
-                        height: SizeConfig.screenHeight,
-                        width: SizeConfig.screenWidth,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Form(
-                          key: _formKey,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 20),
-                                  child: Lottie.asset(
-                                      'assets/animations/task.json'),
-                                ),
-                                const Gap(30),
-                                CustomTextField(
-                                  controller: taskController,
-                                  label: 'Task Title',
-                                  validator: 'text',
-                                  fillColor: AppConstants.primaryColor,
-                                  lebelColor: Colors.white,
-                                  textColor: Colors.white,
-                                  cursorColor: Colors.white,
-                                  errorTextColor: Colors.white,
-                                ),
-                                const Gap(20),
-                                CustomTextField(
-                                  controller: descriptionController,
-                                  label: 'Task Description',
-                                  validator: 'text',
-                                  fillColor: AppConstants.primaryColor,
-                                  lebelColor: Colors.white,
-                                  textColor: Colors.white,
-                                  cursorColor: Colors.white,
-                                  errorTextColor: Colors.white,
-                                ),
-                                const Gap(20),
-                                InkWell(
-                                  onTap: (() {
-                                    _currentDate = DateTime.now();
-                                    BottomPicker.date(
-                                      title: "Choose your date",
-                                      titleStyle: GoogleFonts.quicksand(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize:
-                                              SizeConfig.screenWidth! * 0.04,
-                                          color: AppConstants.primaryColor),
-                                      closeIconColor: AppConstants.primaryColor,
-                                      dateOrder: DatePickerDateOrder.dmy,
-                                      initialDateTime: _currentDate,
-                                      minDateTime: _currentDate,
-                                      bottomPickerTheme:
-                                          BottomPickerTheme.plumPlate,
-                                      onSubmit: (dateTime) {
-                                        setState(() {
-                                          _currentDate = dateTime;
-                                          isChooseDate = true;
-                                          date = DateFormat('dd MMMM, yyyy')
-                                              .format(dateTime);
-                                        });
-                                      },
-                                    ).show(context);
-                                  }),
-                                  child: Container(
-                                    width: SizeConfig.screenWidth,
-                                    height: SizeConfig.screenHeight! * 0.07,
-                                    padding: const EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        border:
-                                            Border.all(color: Colors.white)),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          isChooseDate
-                                              ? date
-                                              : 'Choose your date',
-                                          style: GoogleFonts.quicksand(
-                                              color: Colors.white,
-                                              fontSize:
-                                                  SizeConfig.screenWidth! *
-                                                      0.035,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                const Gap(30),
-                                MaterialButton(
-                                  color: Colors.white,
-                                  minWidth: SizeConfig.screenWidth,
-                                  height: SizeConfig.screenHeight! * 0.07,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  onPressed: () {
-                                    if (_formKey.currentState!.validate()) {
-                                      if (!isChooseDate) {
-                                        Get.snackbar("Alert",
-                                            'Choose date before submit!',
-                                            snackPosition: SnackPosition.BOTTOM,
-                                            colorText: Colors.white);
-                                        return;
-                                      }
-                                      showDialog(
-                                          context: context,
-                                          barrierDismissible: false,
-                                          builder: ((context) => const Center(
-                                                child:
-                                                    CircularProgressIndicator(
-                                                        color: AppConstants
-                                                            .primaryColor),
-                                              )));
-                                      try {
-                                        if (widget.taskType == 'UPDATE') {
-                                          Provider.of<ToDoController>(context,
-                                                  listen: false)
-                                              .updateToDo(ToDoModel(
-                                                  tid: widget.toDoModel!.tid,
-                                                  title: taskController.text
-                                                      .trim(),
-                                                  description:
-                                                      descriptionController.text
-                                                          .trim(),
-                                                  date: date));
-                                        } else {
-                                          Provider.of<ToDoController>(context,
-                                                  listen: false)
-                                              .createToDo(ToDoModel(
-                                                  tid: uuid.v4(),
-                                                  title: taskController.text
-                                                      .trim(),
-                                                  description:
-                                                      descriptionController.text
-                                                          .trim(),
-                                                  date: date));
-                                        }
-                                      } catch (e) {
-                                        Get.snackbar("Error", e.toString(),
-                                            snackPosition: SnackPosition.BOTTOM,
-                                            colorText: Colors.white);
-                                      }
-                                      Navigator.popUntil(
-                                          context, (route) => route.isFirst);
-                                    }
-                                  },
-                                  child: Text(
-                                    widget.taskType == 'UPDATE'
-                                        ? 'UPDATE TASK'
-                                        : "Add Task",
+                body: Container(
+                  height: SizeConfig.screenHeight,
+                  width: SizeConfig.screenWidth,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Form(
+                    key: _formKey,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: Lottie.asset('assets/animations/task.json'),
+                          ),
+                          const Gap(30),
+                          CustomTextField(
+                            controller: taskController,
+                            label: 'Task Title',
+                            validator: 'text',
+                            fillColor: AppConstants.primaryColor,
+                            lebelColor: Colors.white,
+                            textColor: Colors.white,
+                            cursorColor: Colors.white,
+                            errorTextColor: Colors.white,
+                          ),
+                          const Gap(20),
+                          CustomTextField(
+                            controller: descriptionController,
+                            label: 'Task Description',
+                            validator: 'text',
+                            fillColor: AppConstants.primaryColor,
+                            lebelColor: Colors.white,
+                            textColor: Colors.white,
+                            cursorColor: Colors.white,
+                            errorTextColor: Colors.white,
+                          ),
+                          const Gap(20),
+                          InkWell(
+                            onTap: (() {
+                              _currentDate = DateTime.now();
+                              BottomPicker.date(
+                                title: "Choose your date",
+                                titleStyle: GoogleFonts.quicksand(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: SizeConfig.screenWidth! * 0.04,
+                                    color: AppConstants.primaryColor),
+                                closeIconColor: AppConstants.primaryColor,
+                                dateOrder: DatePickerDateOrder.dmy,
+                                initialDateTime: _currentDate,
+                                minDateTime: _currentDate,
+                                bottomPickerTheme: BottomPickerTheme.plumPlate,
+                                onSubmit: (dateTime) {
+                                  setState(() {
+                                    _currentDate = dateTime;
+                                    isChooseDate = true;
+                                    date = DateFormat('dd MMMM, yyyy')
+                                        .format(dateTime);
+                                  });
+                                },
+                              ).show(context);
+                            }),
+                            child: Container(
+                              width: SizeConfig.screenWidth,
+                              height: SizeConfig.screenHeight! * 0.07,
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(color: Colors.white)),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    isChooseDate ? date : 'Choose your date',
                                     style: GoogleFonts.quicksand(
-                                      color: AppConstants.primaryColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: SizeConfig.screenWidth! * 0.045,
-                                    ),
+                                        color: Colors.white,
+                                        fontSize:
+                                            SizeConfig.screenWidth! * 0.035,
+                                        fontWeight: FontWeight.w500),
                                   ),
-                                )
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      value.isLoding
-                          ? Container(
-                              height: SizeConfig.screenHeight,
-                              width: SizeConfig.screenWidth,
-                              color: Colors.black12,
-                              child: const Center(
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                ),
+                          const Gap(30),
+                          MaterialButton(
+                            color: Colors.white,
+                            minWidth: SizeConfig.screenWidth,
+                            height: SizeConfig.screenHeight! * 0.07,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                if (!isChooseDate) {
+                                  Get.snackbar(
+                                      "Alert", 'Choose date before submit!',
+                                      snackPosition: SnackPosition.BOTTOM,
+                                      colorText: Colors.white);
+                                  return;
+                                }
+                                showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: ((context) => const Center(
+                                          child: CircularProgressIndicator(
+                                              color: AppConstants.primaryColor),
+                                        )));
+                                try {
+                                  if (widget.taskType == 'UPDATE') {
+                                    Provider.of<ToDoController>(context,
+                                            listen: false)
+                                        .updateToDo(ToDoModel(
+                                            tid: widget.toDoModel!.tid,
+                                            title: taskController.text.trim(),
+                                            description: descriptionController
+                                                .text
+                                                .trim(),
+                                            date: date));
+                                  } else {
+                                    Provider.of<ToDoController>(context,
+                                            listen: false)
+                                        .createToDo(ToDoModel(
+                                            tid: uuid.v4(),
+                                            title: taskController.text.trim(),
+                                            description: descriptionController
+                                                .text
+                                                .trim(),
+                                            date: date));
+                                  }
+                                } catch (e) {
+                                  Get.snackbar("Error", e.toString(),
+                                      snackPosition: SnackPosition.BOTTOM,
+                                      colorText: Colors.white);
+                                }
+                                Navigator.popUntil(
+                                    context, (route) => route.isFirst);
+                              }
+                            },
+                            child: Text(
+                              widget.taskType == 'UPDATE'
+                                  ? 'UPDATE TASK'
+                                  : "Add Task",
+                              style: GoogleFonts.quicksand(
+                                color: AppConstants.primaryColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: SizeConfig.screenWidth! * 0.045,
                               ),
-                            )
-                          : const SizedBox()
-                    ],
-                  );
-                }))));
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ))));
   }
 }

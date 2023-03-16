@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:get/route_manager.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -20,11 +21,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final storage = GetStorage();
+
   @override
   void initState() {
-    Provider.of<ToDoController>(context, listen: false).setUser();
-    Provider.of<ToDoController>(context, listen: false).readToDo();
     super.initState();
+    Provider.of<ToDoController>(context, listen: false)
+        .setUser(storage.read('userId') ?? '');
+    Provider.of<ToDoController>(context, listen: false).readToDo();
   }
 
   @override
@@ -83,12 +87,6 @@ class _HomePageState extends State<HomePage> {
                           Expanded(
                             child: Consumer<ToDoController>(
                               builder: (context, value, child) {
-                                if (value.isLoding) {
-                                  return const Center(
-                                    child: CircularProgressIndicator(
-                                        color: AppConstants.primaryColor),
-                                  );
-                                }
                                 if (value.todos.isEmpty) {
                                   return Center(
                                     child: Text(

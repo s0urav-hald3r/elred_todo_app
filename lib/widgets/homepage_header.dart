@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,8 @@ class HomePageHeader extends StatelessWidget {
   }) : super(key: key);
 
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final storage = GetStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +43,14 @@ class HomePageHeader extends StatelessWidget {
                 return InkWell(
                   onTap: () async {
                     try {
-                      value.isGoogleLogIn
-                          ? _googleSignIn.disconnect()
-                          : await FirebaseAuth.instance.signOut();
+                      if (value.isGoogleLogIn) {
+                        await _googleSignIn.signOut();
+                      } else {
+                        await _firebaseAuth.signOut();
+                      }
+                      await storage.erase();
+                      Provider.of<ToDoController>(context, listen: false)
+                          .logout();
                     } on FirebaseAuthException catch (e) {
                       Get.snackbar("Error", e.toString(),
                           snackPosition: SnackPosition.BOTTOM,
