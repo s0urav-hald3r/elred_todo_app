@@ -190,7 +190,7 @@ class _AddTaskState extends State<AddTask> {
                                     barrierDismissible: false,
                                     builder: ((context) => const Center(
                                           child: CircularProgressIndicator(
-                                              color: AppConstants.primaryColor),
+                                              color: Colors.white),
                                         )));
                                 try {
                                   if (widget.taskType == 'UPDATE') {

@@ -32,11 +32,11 @@ class AuthController with ChangeNotifier {
       final UserCredential userCredential = await _firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
       await storage.write('userId', userCredential.user!.uid);
-      Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       Get.snackbar("Error", e.toString(),
           snackPosition: SnackPosition.BOTTOM,
           colorText: AppConstants.primaryColor);
+    } finally {
       Navigator.pop(context);
     }
   }

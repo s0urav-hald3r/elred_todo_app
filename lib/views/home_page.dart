@@ -26,9 +26,11 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    Provider.of<ToDoController>(context, listen: false)
-        .setUser(storage.read('userId') ?? '');
-    Provider.of<ToDoController>(context, listen: false).readToDo();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<ToDoController>(context, listen: false)
+          .setUser(storage.read('userId') ?? '');
+      Provider.of<ToDoController>(context, listen: false).readToDo();
+    });
   }
 
   @override
@@ -87,6 +89,13 @@ class _HomePageState extends State<HomePage> {
                           Expanded(
                             child: Consumer<ToDoController>(
                               builder: (context, value, child) {
+                                if (value.isLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(
+                                      color: AppConstants.primaryColor,
+                                    ),
+                                  );
+                                }
                                 if (value.todos.isEmpty) {
                                   return Center(
                                     child: Text(
