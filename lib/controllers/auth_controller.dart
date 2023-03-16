@@ -18,26 +18,42 @@ class AuthController with ChangeNotifier {
     notifyListeners();
   }
 
-  logingUsingEmailPassword(
-      BuildContext context, String email, String password) async {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: ((context) => const Center(
-              child:
-                  CircularProgressIndicator(color: AppConstants.primaryColor),
-            )));
+  addLoader() {
+    isLoading = true;
+    notifyListeners();
+  }
 
+  removeLoader() {
+    isLoading = false;
+    notifyListeners();
+  }
+
+  logingUsingEmailPassword(String email, String password) async {
+    addLoader();
     try {
       final UserCredential userCredential = await _firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
       await storage.write('userId', userCredential.user!.uid);
+      removeLoader();
     } on FirebaseAuthException catch (e) {
-      Get.snackbar("Error", e.toString(),
-          snackPosition: SnackPosition.BOTTOM,
-          colorText: AppConstants.primaryColor);
-    } finally {
-      Navigator.pop(context);
+      if (e.code == 'user-not-found') {
+        try {
+          final UserCredential userCredential = await _firebaseAuth
+              .createUserWithEmailAndPassword(email: email, password: password);
+          await storage.write('userId', userCredential.user!.uid);
+          removeLoader();
+        } catch (e) {
+          removeLoader();
+          Get.snackbar("Error", e.toString(),
+              snackPosition: SnackPosition.BOTTOM,
+              colorText: AppConstants.primaryColor);
+        }
+      } else {
+        removeLoader();
+        Get.snackbar("Error", e.toString(),
+            snackPosition: SnackPosition.BOTTOM,
+            colorText: AppConstants.primaryColor);
+      }
     }
   }
 
