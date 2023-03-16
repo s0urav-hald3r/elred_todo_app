@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "629581114649-iosv2g6ll69aka8vu1lhoja296f5a7vv.apps.googleusercontent.com",
+          "client_id": "629581114649-r5q85to9g6862gdiqle85t7i9ppr06ta.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.elred_todo_app",
+            "certificate_hash": "3bfbac5ab1d66131dfe076b492af4489b5fc78f2"
+          }
+        },
+        {
+          "client_id": "629581114649-trfcsm95rbljbdlsgvpumu11imqjclg8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.elred_todo_app",
@@ -22,7 +30,7 @@
           }
         },
         {
-          "client_id": "629581114649-h4b7fupmvu8jicbfv8bm356unbqq3fmj.apps.googleusercontent.com",
+          "client_id": "629581114649-su0il1u2iga35jr8h36aotl0d7i3i9dk.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
